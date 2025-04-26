@@ -17,14 +17,14 @@ It fetches live weather data and displays it in an interactive and user-friendly
 
 ## Screenshots
 
-### Home Page
+### Weather Details
 ![Home Page](sc/sc1.png)
 
-### Weather Details
-![Weather Details](https://via.placeholder.com/800x400.png?text=Weather+Details+Screenshot)
+### 7-day forecast
+![Weather Details](sc/sc2.png)
 
 ### Error Handling
-![Error Handling](https://via.placeholder.com/800x400.png?text=Error+Handling+Screenshot)
+![Error Handling](sc/sc3.png)
 
 ---
 
