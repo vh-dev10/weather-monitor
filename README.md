@@ -18,7 +18,7 @@ It fetches live weather data and displays it in an interactive and user-friendly
 ## Screenshots
 
 ### Home Page
-![Home Page](sc/Screenshot (515).png)
+![Home Page](sc/sc1.png)
 
 ### Weather Details
 ![Weather Details](https://via.placeholder.com/800x400.png?text=Weather+Details+Screenshot)
