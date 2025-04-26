@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Forecast</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f7;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: #f1f1f1;
+            color: #666;
+            text-align: center;
+            padding: 12px 20px;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            margin-bottom: 10px;
+            font-size: 20px;
+            color: #007BFF;
+        }
+
+        .flex-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .weather-icon-large {
+            width: 80px;
+            height: 80px;
+        }
+
+        .current-temp {
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .current-desc {
+            font-size: 22px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .forecast-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-top: 10px;
+        }
+
+        .forecast-item {
+            flex: 0 0 auto;
+            width: 160px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 14px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+
+        .forecast-item img {
+            display: block;
+            margin: 0 auto 5px;
+        }
+
+        .search-box form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .search-box input[type="text"] {
+            padding: 10px;
+            flex: 1;
+            min-width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-box button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-box button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 500px) {
+            .forecast-item {
+                width: 140px;
+                font-size: 13px;
+            }
+
+            .current-temp {
+                font-size: 30px;
+            }
+
+            .current-desc {
+                font-size: 18px;
+            }
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+    
+        :root {
+            --bg: #f0f4f7;
+            --text: #333;
+            --card-bg: #fff;
+        }
+    
+        body.dark-mode {
+            --bg: #121212;
+            --text: #f0f0f0;
+            --card-bg: #1e1e1e;
+        }
+    
+        .card {
+            background: var(--card-bg);
+            color: var(--text);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+    
+        .toggle-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 999;
+        }
+    
+        .toggle-btn:hover {
+            background: #0056b3;
+        }
+        .forecast-item {
+            background-color: var(--card-bg); /* previously hardcoded light background */
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.1); /* subtle border for dark mode */
+            transition: background 0.3s, color 0.3s;
+        }
+        
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <header>
+        🌤️ Weather Dashboard
+        <!--<button class="toggle-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>-->
+
+    </header>
+
+    <div class="container">
+        <!-- Search Box -->
+        <div class="card search-box">
+            <form method="post">
+                {% csrf_token %}
+                <input type="text" name="city" placeholder="Enter city name..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        
+        {% if err or flg %}
+        <!-- City Name -->
+        <div class="card">
+            <div class="section-title"><strong>{{ error }}{{wdata.0.city}}</strong></div>
+        </div>
+        {% endif %}
+
+        {% if flg %}
+        <!-- Current Weather -->
+        <div class="card">
+            <div class="section-title">Current Weather</div>
+            <div class="flex-row">
+                <img class="weather-icon-large" src="https://openweathermap.org/img/wn/{{wdata.0.icon}}@2x.png" alt="icon">
+                <div>
+                    <div class="current-temp">{{wdata.0.temp}}°C</div>
+                    <div class="current-desc">{{wdata.0.weather_des}}</div>
+                </div>
+            </div>
+            <p>Feels Like: {{wdata.0.feels_like}}°C</p>
+            <p>Min: {{wdata.0.min_temp}}°C | Max: {{wdata.0.max_temp}}°C</p>
+            <p>
+                <img src="https://img.icons8.com/ios/20/000000/sunrise.png" alt="sunrise">
+                Sunrise: {{wdata.0.sunrise}} &nbsp;
+                <img src="https://img.icons8.com/ios/20/000000/sunset.png" alt="sunset">
+                Sunset: {{wdata.0.sunset}}
+            </p>
+            <p>
+                <img src="https://img.icons8.com/ios-filled/20/000000/humidity.png" alt="humidity">
+                humidity: {{wdata.0.humidity}} %
+            </p>
+            <p>
+                <img src="https://img.icons8.com/ios-filled/20/000000/wind.png" alt="wind">
+                Wind Speed: {{wdata.0.wind_speed}} km/h
+            </p>
+            <p>
+                <img src="https://img.icons8.com/ios-filled/20/000000/visible.png" alt="visibility">
+                Visibility: {{wdata.0.visibiity}} km
+            </p>
+        </div>
+        <!--
+         Hourly Forecast
+        <div class="card">
+            <div class="section-title">Hourly Forecast (Next 24 hours)</div>
+            <div class="forecast-scroll">
+                <div class="forecast-item">
+                    <strong>13:00</strong>
+                    <img src="https://openweathermap.org/img/wn/01d.png" alt="icon">
+                    Temp: 28°C<br>
+                    Feels Like: 30°C<br>
+                    <small>Clear Sky</small>
+                </div>
+                <div class="forecast-item">
+                    <strong>14:00</strong>
+                    <img src="https://openweathermap.org/img/wn/02d.png" alt="icon">
+                    Temp: 29°C<br>
+                    Feels Like: 31°C<br>
+                    <small>Partly Cloudy</small>
+                </div>
+                <div class="forecast-item">
+                    <strong>15:00</strong>
+                    <img src="https://openweathermap.org/img/wn/03d.png" alt="icon">
+                    Temp: 30°C<br>
+                    Feels Like: 32°C<br>
+                    <small>Cloudy</small>
+                </div>
+            </div>
+        </div>
+        -->
+        <!-- 5-Day Forecast -->
+        <div class="card">
+            <div class="section-title">7-Day Forecast</div>
+            <div class="forecast-scroll">
+                <div class="forecast-item">
+                    <strong>Mon, 16 Apr</strong>
+                    <img src="https://openweathermap.org/img/wn/04d.png" alt="icon">
+                    <div class="current-temp">{{wdata.0.temp}}°C</div>
+                    Min: 24°C | Max: 33°C<br>
+                    Feels Like: 30°C<br>
+                    <img src="https://img.icons8.com/ios/20/000000/sunrise.png" width="14"> 05:40<br>
+                    <img src="https://img.icons8.com/ios/20/000000/sunset.png" width="14"> 18:25<br>
+                    <small>Broken Clouds</small>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        &copy; 2025 Weather App | Built by You 😎
+    </footer>
+</body>
+<script>
+    function toggleDarkMode() {
+        const body = document.body;
+        body.classList.toggle('dark-mode');
+        // Save preference
+        localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+    }
+
+    // Load saved preference
+    window.onload = function () {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    }
+        const toggleDark = document.getElementById("darkModeToggle");
+    
+        toggleDark.addEventListener("click", function () {
+            document.body.classList.toggle("dark-mode");
+    
+            // Update icons8 icons based on dark mode
+            const isDark = document.body.classList.contains("dark-mode");
+            document.querySelectorAll("img").forEach(img => {
+                if (img.src.includes("icons8.com")) {
+                    if (isDark) {
+                        // Replace black icon with white variant
+                        img.src = img.src.replace("/000000/", "/ffffff/");
+                    } else {
+                        // Revert white icon back to black
+                        img.src = img.src.replace("/ffffff/", "/000000/");
+                    }
+                }
+            });
+        });
+    </script>
+    
+</script>
+
+</html>
