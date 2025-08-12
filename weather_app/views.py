@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,HttpResponse
 import requests
 import math
 import datetime
@@ -61,15 +61,32 @@ def getForecastData(jsonResponse):
         
 def weather_monitor_main(request):
     if request.method=="POST":
+        location_flag=False
+        try:
+            if request.POST['flag']=="curr_location":
+                location_flag=True
+        except:
+            pass
         curr_date=datetime.datetime.now()
         x=curr_date.strftime("%A, %d %b")
         api_key="8f314375161abe34dc5f336667bbd0d1" #api secret key
-        city=request.POST['city'] # reciving user iput data
+        city=None # reciving user iput data
         data=[] # variable to store current weather data and forecast data
         # get current weather data
-        url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric" #api call
-        response = requests.get(url) # capture response from api
-        curr_data = response.json() # get json into form of python dict
+        response=None
+        curr_data=None
+        url=None
+        if location_flag:
+            lat=request.POST["latitude"]
+            lon=request.POST["longitude"]
+            url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=metric" #api call
+            response = requests.get(url) # capture response from api
+            curr_data = response.json() # get json into form of python dict
+        else:
+            city=request.POST['city']
+            url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric" #api call
+            response = requests.get(url) # capture response from api
+            curr_data = response.json() # get json into form of python dict
         # error handeling for searched city name not found
         if curr_data['cod']=="404":
             return render(request,'index.html',{"flg":False,"error":"city not found","err":True,"date":x})
@@ -81,7 +98,8 @@ def weather_monitor_main(request):
         # end
         
         # get forecast data
-        url = f"https://api.openweathermap.org/data/2.5/forecast/daily?APPID=9b4bbf30228eb8528d36e79d05da1fac&q={city}&units=metric&cnt=8" #api call
+        city_forecast=current_data['city']
+        url = f"https://api.openweathermap.org/data/2.5/forecast/daily?APPID=9b4bbf30228eb8528d36e79d05da1fac&q={city_forecast}&units=metric&cnt=8" #api call
         response = requests.get(url) # capture response from api
         fore_data = response.json() # get json into form of python dict
         #data storing

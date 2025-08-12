@@ -120,7 +120,13 @@
         <input type="text" name="city" placeholder="Search city" required>
         <button><i class="fas fa-search"></i></button>
         </form>
-        <button class="location-btn"><i class="fas fa-crosshairs"></i> Current Location</button>
+        <form id="locationForm" method="POST" action="{% url 'weather' %}">
+          {% csrf_token %}
+          <input type="hidden" name="latitude" id="lat">
+          <input type="hidden" name="longitude" id="lon">
+          <input type="hidden" name="flag" value="curr_location">
+        </form>
+        <button class="location-btn" id="locationBtn"><i class="fas fa-crosshairs"></i> Current Location</button>
       </div>
     </div>
     {% if err or flg %}
@@ -217,5 +223,24 @@
   
   startClockWithOffset({{wdata.0.timezone}});
   </script>
+
+  <script>
+document.getElementById("locationBtn").addEventListener("click", function () {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (pos) {
+            // Fill hidden form inputs
+            document.getElementById("lat").value = pos.coords.latitude;
+            document.getElementById("lon").value = pos.coords.longitude;
+
+            // Submit form to Django — page will reload with rendered template
+            document.getElementById("locationForm").submit();
+        }, function (error) {
+            alert("Unable to fetch location: " + error.message);
+        });
+    } else {
+        alert("Geolocation is not supported in your browser.");
+    }
+});
+</script>
 
 </html>
