@@ -111,4 +111,4 @@ def weather_monitor_main(request):
         return render(request,'index.html',{"flg":True,"wdata":data})
     else:
         # inital page rendering
-        return render(request,'index.html',{"flg":False,'rld_flag':1})
+        return render(request,'index.html',{"flg":False,'rld_flg':1})
