@@ -70,7 +70,7 @@ def weather_monitor_main(request):
             pass
         curr_date=datetime.datetime.now()
         x=curr_date.strftime("%A, %d %b")
-        api_key=os.environ.get('MY_API_KEY', 'default_value')#api secret key
+        api_key="8f314375161abe34dc5f336667bbd0d1"#os.environ.get('MY_API_KEY', 'default_value')#api secret key
         city=None # reciving user iput data
         data=[] # variable to store current weather data and forecast data
         # get current weather data
