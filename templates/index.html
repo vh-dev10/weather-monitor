@@ -225,7 +225,7 @@
   </script>
 
   <script>
-document.getElementById("locationBtn").addEventListener("click", function () {
+    function get_data_geo () {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (pos) {
             // Fill hidden form inputs
@@ -240,7 +240,9 @@ document.getElementById("locationBtn").addEventListener("click", function () {
     } else {
         alert("Geolocation is not supported in your browser.");
     }
-});
+}
+document.getElementById("locationBtn").addEventListener("click", get_data_geo ());
+window.onload=get_data_geo();
 </script>
 
 </html>
