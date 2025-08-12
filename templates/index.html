@@ -224,6 +224,24 @@
   startClockWithOffset({{wdata.0.timezone}});
   </script>
 
+  <script>
+document.getElementById("locationBtn").addEventListener("click", function () {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (pos) {
+            // Fill hidden form inputs
+            document.getElementById("lat").value = pos.coords.latitude;
+            document.getElementById("lon").value = pos.coords.longitude;
+
+            // Submit form to Django — page will reload with rendered template
+            document.getElementById("locationForm").submit();
+        }, function (error) {
+            alert("Unable to fetch location: " + error.message);
+        });
+    } else {
+        alert("Geolocation is not supported in your browser.");
+    }
+});
+</script>
 <script>
     function get_data_geo () {
     if (navigator.geolocation) {
@@ -250,5 +268,4 @@ window.onload=function(){
 }
 }
 </script>
-
 </html>
