@@ -100,7 +100,7 @@ def weather_monitor_main(request):
         
         # get forecast data
         city_forecast=current_data['city']
-        url = f"https://api.openweathermap.org/data/2.5/forecast/daily?APPID={os.environ.get('API_2)}c&q={city_forecast}&units=metric&cnt=8" #api call
+        url = f"https://api.openweathermap.org/data/2.5/forecast/daily?APPID={os.environ.get('API_2')}c&q={city_forecast}&units=metric&cnt=8" #api call
         response = requests.get(url) # capture response from api
         fore_data = response.json() # get json into form of python dict
         #data storing
