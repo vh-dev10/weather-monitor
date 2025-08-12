@@ -242,7 +242,11 @@
     }
 }
 document.getElementById("locationBtn").addEventListener("click", get_data_geo ());
-get_data_geo();
+let isloaded=false;
+if(!isloaded){
+  get_data_geo();
+  isloaded=true;
+}
 </script>
 
 </html>
