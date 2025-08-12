@@ -242,10 +242,12 @@
     }
 }
 document.getElementById("locationBtn").addEventListener("click", get_data_geo ());
-let isloaded={{rld_flag}};
-if(!isloaded){
-  isloaded=true;
+var is_loaded={{rld_flg}};
+window.onload=function(){
+  if(is_loaded){
   get_data_geo();
+  is_loaded=0;
+}
 }
 </script>
 
