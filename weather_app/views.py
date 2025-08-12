@@ -108,7 +108,7 @@ def weather_monitor_main(request):
         data.append(forecast_data) # store data in to list for sending to html template.
         #end
         #render template after sucessful response'''
-        return render(request,'index.html',{"flg":True,"wdata":data})
+        return render(request,'index.html',{"flg":True,"wdata":data,'rld_flag':1})
     else:
         # inital page rendering
-        return render(request,'index.html',{"flg":False})
+        return render(request,'index.html',{"flg":False,'rld_flag':0})
